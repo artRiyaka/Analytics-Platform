@@ -287,7 +287,7 @@ main { min-width: 0; }
 .topbar {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 35;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -680,17 +680,21 @@ td.is-lead { color: var(--accent); font-weight: 700; }
 .rank-name { font-weight: 600; }
 .rank-name small { display: block; color: var(--muted); font-size: 11px; font-weight: 500; }
 
-.divbar { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; height: 8px; }
-.divbar-neg, .divbar-pos { display: flex; height: 8px; }
-.divbar-neg { justify-content: flex-end; }
-.divbar-neg span, .divbar-pos span {
+.track {
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+.track span {
   display: block;
   height: 100%;
-  border-radius: 99px;
+  border-radius: inherit;
+  transform-origin: left center;
   animation: grow 0.7s ease;
 }
-.divbar-neg span { background: #e07a7a; transform-origin: right center; }
-.divbar-pos span { background: #7dcea0; transform-origin: left center; }
+.track span.up { background: #7dcea0; }
+.track span.down { background: #e07a7a; }
 
 .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px; }
 .swatch {
@@ -776,7 +780,7 @@ td.is-lead { color: var(--accent); font-weight: 700; }
 
 .drawer {
   position: fixed;
-  top: 0;
+  top: 76px;
   right: 0;
   bottom: 0;
   z-index: 30;
@@ -973,7 +977,8 @@ td.is-lead { color: var(--accent); font-weight: 700; }
   .timeline li { grid-template-columns: 1fr; gap: 4px; }
   .donut-wrap { grid-template-columns: 1fr; justify-items: center; }
   .rank-row { grid-template-columns: 1fr auto; }
-  .divbar { grid-column: 1 / -1; }
+  .track { grid-column: 1 / -1; }
+  .drawer { top: 118px; }
   .login-stats { gap: 16px; }
 }
 

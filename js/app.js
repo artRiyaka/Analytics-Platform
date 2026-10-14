@@ -220,21 +220,17 @@
     return all + rest;
   }
 
-  function divergingRows(rows, action) {
-    const max = Math.max(...rows.map((r) => Math.abs(r.change)), 1);
-    return `<div class="rank-list">${rows.map((r) => {
-      const pct = (Math.abs(r.change) / max) * 100;
-      const pos = r.change >= 0;
-      return `<button class="rank-row" type="button" data-action="${action}" data-value="${esc(r.name)}">
+function divergingRows(rows, action) {
+  const max = Math.max(...rows.map((r) => Math.abs(r.change)), 1);
+  return `<div class="rank-list">${rows.map((r) => {
+    const pct = Math.max(6, (Math.abs(r.change) / max) * 100);
+    return `<button class="rank-row" type="button" data-action="${action}" data-value="${esc(r.name)}">
         <span class="rank-name">${esc(r.name)}<small>${r.count} product${r.count === 1 ? "" : "s"}</small></span>
-        <span class="divbar" aria-hidden="true">
-          <span class="divbar-neg"><span style="width:${pos ? 0 : pct}%"></span></span>
-          <span class="divbar-pos"><span style="width:${pos ? pct : 0}%"></span></span>
-        </span>
+        <span class="track" aria-hidden="true"><span class="${r.change >= 0 ? "up" : "down"}" style="width:${pct}%"></span></span>
         <span class="delta ${deltaClass(r.change)}">${signedPct(r.change)}</span>
       </button>`;
-    }).join("")}</div>`;
-  }
+  }).join("")}</div>`;
+}
 
   function productCard(p) {
     const ch = priceChange(p);
@@ -377,7 +373,7 @@
         </div>
         <div class="result-line">
           <span id="result-count" aria-live="polite"></span>
-          ${filtersActive() ? `<button class="text-btn" type="button" data-action="clear-filters">Clear filters</button>` : ""}
+          <button id="clear-filters" class="text-btn" type="button" data-action="clear-filters"${filtersActive() ? "" : " hidden"}>Clear filters</button>
         </div>
       </div>
       <div id="product-grid"></div>`;
@@ -387,8 +383,10 @@
     const host = document.getElementById("product-grid");
     if (!host) return;
     const items = filteredProducts();
-    const count = document.getElementById("result-count");
-    if (count) count.textContent = `${items.length} product${items.length === 1 ? "" : "s"}`;
+const count = document.getElementById("result-count");
+  if (count) count.textContent = `${items.length} product${items.length === 1 ? "" : "s"}`;
+  const clear = document.getElementById("clear-filters");
+  if (clear) clear.hidden = !filtersActive();
     host.innerHTML = items.length
       ? `<div class="product-grid">${items.map(productCard).join("")}</div>`
       : `<div class="empty"><p>No products match this search.</p><button class="btn-ghost" type="button" data-action="clear-filters">Clear filters</button></div>`;
@@ -519,13 +517,32 @@
     return [...new Set(out)];
   }
 
-  function formatAxis(v, mode) {
-    if (mode === "money") {
-      if (Math.abs(v) >= 1000) return `$${(v / 1000).toFixed(1)}k`;
-      return `$${Math.round(v)}`;
+function axisScale(min, max) {
+  const span = Math.max(max - min, 1e-6);
+  const raw = span / 4;
+  const pow = Math.pow(10, Math.floor(Math.log10(raw)));
+  const n = raw / pow;
+  const step = (n >= 7 ? 10 : n >= 3 ? 5 : n >= 1.5 ? 2 : 1) * pow;
+  const start = Math.floor(min / step) * step;
+  const end = Math.ceil(max / step) * step;
+  const count = Math.max(1, Math.round((end - start) / step));
+  const ticks = [];
+  for (let i = 0; i <= count; i++) ticks.push(start + i * step);
+  return { min: start, max: end, step, ticks };
+}
+
+function formatTick(v, mode, step) {
+  const cleaned = Math.abs(v) < step / 1000 ? 0 : v;
+  if (mode === "money") {
+    if (Math.abs(cleaned) >= 1000) {
+      const k = cleaned / 1000;
+      return `$${Math.abs(k) >= 10 ? Math.round(k) : k.toFixed(1)}k`;
     }
-    return String(Math.round(v));
+    return `$${Math.round(cleaned)}`;
   }
+  const digits = step >= 1 ? 0 : step >= 0.1 ? 1 : 2;
+  return cleaned.toFixed(digits);
+}
 
   function formatVal(v, mode) {
     return mode === "money" ? money(v) : v.toFixed(1);
@@ -546,22 +563,20 @@
     const n = ready[0].values.length;
     const labs = labels.slice(-n);
     const all = ready.flatMap((s) => s.values);
-    let min = Math.min(...all);
-    let max = Math.max(...all);
-    if (min === max) { min -= 1; max += 1; }
-    const padY = (max - min) * 0.14;
-    min -= padY;
-    max += padY;
+    let dataMin = Math.min(...all);
+    let dataMax = Math.max(...all);
+    if (dataMin === dataMax) { dataMin -= 1; dataMax += 1; }
+    const padY = (dataMax - dataMin) * 0.14;
+    const scale = axisScale(dataMin - padY, dataMax + padY);
     const x = (i) => pad.l + (n === 1 ? 0.5 : i / (n - 1)) * (W - pad.l - pad.r);
-    const y = (v) => pad.t + (1 - (v - min) / (max - min)) * (H - pad.t - pad.b);
+    const y = (v) => pad.t + (1 - (v - scale.min) / (scale.max - scale.min || 1)) * (H - pad.t - pad.b);
 
     let grid = "";
-    for (let t = 0; t <= 4; t++) {
-      const v = min + ((max - min) * t) / 4;
+    scale.ticks.forEach((v) => {
       const yy = y(v);
       grid += `<line x1="${pad.l}" y1="${yy}" x2="${W - pad.r}" y2="${yy}" stroke="rgba(255,255,255,0.07)"></line>`;
-      grid += `<text x="${pad.l - 8}" y="${yy + 4}" text-anchor="end" fill="#8b919c" font-size="11">${esc(formatAxis(v, mode))}</text>`;
-    }
+      grid += `<text x="${pad.l - 8}" y="${yy + 4}" text-anchor="end" fill="#8b919c" font-size="11">${esc(formatTick(v, mode, scale.step))}</text>`;
+    });
     let xlabels = "";
     tickIndices(n).forEach((i) => {
       const [m, yr] = labs[i];
