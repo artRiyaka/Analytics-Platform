@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07080b">
+  <title>Vela — Market Intelligence</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2.5 29 16 16 29.5 3 16Z' fill='none' stroke='%23e4c27a' stroke-width='1.6'/%3E%3Cpath d='M16 9.5 22.2 16 16 22.5 9.8 16Z' fill='%23e4c27a'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div id="login" class="login">
+    <section class="login-brand">
+      <div class="wordmark">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 2.5 29 16 16 29.5 3 16Z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M16 9.5 22.2 16 16 22.5 9.8 16Z" fill="currentColor"/>
+        </svg>
+        <span>Vela</span>
+      </div>
+      <div class="login-copy">
+        <p class="eyebrow">Market intelligence</p>
+        <h1>Read the market in one surface.</h1>
+        <p class="lede">External prices, field notes, and desk research, arranged so a category, a color, or a material can be read quickly.</p>
+        <svg class="login-chart" viewBox="0 0 480 120" aria-hidden="true">
+          <path d="M0 92 C40 90 60 78 90 74 C130 68 150 86 190 70 C230 54 250 60 290 46 C330 32 360 40 400 28 C430 20 450 24 480 16" fill="none" stroke="#e4c27a" stroke-width="1.6"/>
+          <path d="M0 92 C40 90 60 78 90 74 C130 68 150 86 190 70 C230 54 250 60 290 46 C330 32 360 40 400 28 C430 20 450 24 480 16 V120 H0 Z" fill="url(#loginFade)"/>
+          <defs>
+            <linearGradient id="loginFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#e4c27a" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#e4c27a" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <p class="chart-caption">Illustrative index</p>
+      </div>
+      <ul class="login-stats">
+        <li><strong>24</strong><span>Products</span></li>
+        <li><strong>18 mo</strong><span>Price history</span></li>
+        <li><strong>6</strong><span>Categories</span></li>
+      </ul>
+    </section>
+    <section class="login-panel">
+      <form id="login-form" autocomplete="off">
+        <p class="eyebrow">Workspace access</p>
+        <h2>Continue</h2>
+        <p class="lede">This demo workspace is ready. Continue to enter.</p>
+        <label class="field">
+          <span>Access ID</span>
+          <input type="text" value="********" readonly tabindex="-1" autocomplete="off" spellcheck="false" aria-label="Access ID">
+        </label>
+        <label class="field">
+          <span>Passcode</span>
+          <input type="text" value="********" readonly tabindex="-1" autocomplete="off" spellcheck="false" aria-label="Passcode">
+        </label>
+        <button class="btn-primary" type="submit" autofocus>Enter workspace</button>
+        <p class="fine">Masked demo access. No setup required.</p>
+      </form>
+    </section>
+  </div>
+
+  <div id="app" class="app" hidden>
+    <aside class="sidebar">
+      <div class="brand-block">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 2.5 29 16 16 29.5 3 16Z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M16 9.5 22.2 16 16 22.5 9.8 16Z" fill="currentColor"/>
+        </svg>
+        <div>
+          <strong>Vela</strong>
+          <span>Intelligence</span>
+        </div>
+      </div>
+      <p class="side-note">Snapshot · 14 Oct 2026</p>
+      <nav class="nav" aria-label="Primary">
+        <button class="nav-btn is-active" type="button" data-view="overview">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          Overview
+        </button>
+        <button class="nav-btn" type="button" data-view="products">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          Products
+        </button>
+        <button class="nav-btn" type="button" data-view="analytics">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16M7 16V9M12 16V5M17 16v-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Analytics
+        </button>
+        <button class="nav-btn" type="button" data-view="trends">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16c2.5-1 3-5 6-5s3.2 3 5.5 3S19 11 20 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M16 8h4v4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Trends
+        </button>
+        <button class="nav-btn" type="button" data-view="insights">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 11h8M8 15h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Insights
+        </button>
+      </nav>
+    </aside>
+    <main id="main">
+      <header class="topbar">
+        <label class="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M16 16.5 20 20.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <input id="global-search" type="search" placeholder="Search products, brands, materials" autocomplete="off" aria-label="Search the database">
+        </label>
+        <div class="segment" role="group" aria-label="Time window">
+          <button type="button" data-range="3M">3M</button>
+          <button type="button" data-range="6M">6M</button>
+          <button type="button" data-range="12M" class="is-active">12M</button>
+          <button type="button" data-range="18M">18M</button>
+        </div>
+        <button class="user-btn" type="button" data-action="sign-out" aria-label="Sign out">
+          <span class="avatar" aria-hidden="true">LA</span>
+          <span class="user-meta">
+            <strong>Lead Analyst</strong>
+            <span>Sign out</span>
+          </span>
+        </button>
+      </header>
+      <div id="view" class="view"></div>
+    </main>
+    <div id="scrim" class="scrim" data-action="close-overlays" hidden></div>
+    <aside id="drawer" class="drawer" hidden aria-label="Product detail"></aside>
+    <div id="modal" class="modal" hidden></div>
+    <div id="tray" class="tray" hidden></div>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </div>
+  <noscript><p class="noscript">Vela needs JavaScript to run this workspace.</p></noscript>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
